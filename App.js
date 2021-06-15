@@ -62,14 +62,16 @@ const App: () => Node = () => {
           <ProgressBox 
             total={1000} 
             current={666} 
+            unit={"Points"}
             animated={true} 
             header={"this is a dope header"} 
             />
           </View>
           <View style={styles.content}>
             <ProgressBar
-              step={index}
-              steps={maxSteps}
+              current={index}
+              total={maxSteps}
+              unit={"Points"}
               height={20} />
           </View>
         <View style={styles.footer}/>

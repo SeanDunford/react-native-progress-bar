@@ -29,11 +29,23 @@ const styles = {
     marginBottom: 8
   }
 }
-export default function ProgressBar({step, steps, height}) {
+
+function generateLabel(current, total, unit) {
+  let label = `${current} / ${total}`;
+  if(unit) {
+    label = `${label} ${unit}`;
+  }
+  return label;
+
+}
+
+export default function ProgressBar({current, total, height, unit}) {
   const [width, setWidth] = React.useState(0);
   // React use Ref ensures react keeps track of the render and the animated value is the same during rerenders ? 
   const animatedValue = React.useRef(new Animated.Value(-1000)).current;
   const reactive = React.useRef(new Animated.Value(-1000)).current;
+
+  const label = generateLabel(current, total, unit);
 
   React.useEffect(() => {
     Animated.timing(animatedValue, {
@@ -45,12 +57,12 @@ export default function ProgressBar({step, steps, height}) {
   }, []);
 
   React.useEffect(() => {
-    reactive.setValue(-width + (width  * step/steps));
-  }, [step, width]);
+    reactive.setValue(-width + (width  * current/total));
+  }, [current, width]);
 
 	return (
   <View style={styles.container}>
-    <Text style={styles.header}>{step} / {steps} </Text>
+    <Text style={styles.header}>{label}</Text>
     <View style={{ 
       ...styles.progressContainer, 
       height, 
@@ -63,13 +75,12 @@ export default function ProgressBar({step, steps, height}) {
           const newWidth = e.nativeEvent.layout.width;
           setWidth(newWidth);
         }}
-        style={{ ...styles.bar, height, borderRadius: height,       transform: [
+        style={{ ...styles.bar, height, borderRadius: height, transform: [
           {
             translateX: animatedValue,
           }
         ] }} />
     </View>
   </View>
-  )
-
+  );
 }
