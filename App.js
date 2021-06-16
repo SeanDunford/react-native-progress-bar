@@ -32,22 +32,26 @@ const styles = StyleSheet.create({
   }
 });
 
+const enableTimer = false;
 
 const App: () => Node = () => {
 
   const isDarkMode = useColorScheme() === 'dark';
 
-  const [index, setIndex] = React.useState(0);
-  const maxSteps = 1000;
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex(Math.floor(Math.random() * maxSteps))  
-    }, 1000);
+  const [current, setcurrent] = React.useState(2000);
+  const total = 1000;
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [index]);
+  if(enableTimer){
+    React.useEffect(() => {
+      const interval = setInterval(() => {
+        setcurrent(current + 10)  
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }, [current]);
+  }
 
   const backgroundStyle = {
     flex: 1,
@@ -69,8 +73,10 @@ const App: () => Node = () => {
           </View>
           <View style={styles.content}>
             <ProgressBar
-              current={index}
-              total={maxSteps}
+              progressBarColor='green'
+              headerText="PersonalGoal"
+              current={current}
+              total={total}
               unit={"Points"}
               height={20} />
           </View>
